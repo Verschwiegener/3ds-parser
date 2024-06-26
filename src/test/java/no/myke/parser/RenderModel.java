@@ -3,6 +3,7 @@ package no.myke.parser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.jogamp.newt.Window;
 import com.jogamp.newt.event.KeyAdapter;
@@ -29,7 +30,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  */
 public class RenderModel implements GLEventListener {
 
-	private static File modelFile = new File("src/test/resources/fighter.3ds");
+	private static File modelFile = new File("src/test/resources/base.3ds");
 	private static File textureFile = new File("src/test/resources/fighter.png");
 
 	private float rotateX = 0.0f;
@@ -48,7 +49,15 @@ public class RenderModel implements GLEventListener {
 		}
 		System.out.println("Using model " + modelFile + " and texture " + textureFile);
 		
-		java.awt.Frame frame = new java.awt.Frame("Render Model");
+		RenderModel modelView = new RenderModel();
+		Model model = modelView.loadModel();
+		System.out.println("Model: " + model.objects.toString());
+		
+		for(ModelObject object : model.objects) {
+			System.out.println("Object: " + Arrays.toString(object.vertices));
+		}
+		
+		/*java.awt.Frame frame = new java.awt.Frame("Render Model");
 		frame.setSize(300, 300);
 		frame.setLayout(new java.awt.BorderLayout());
 
@@ -70,7 +79,7 @@ public class RenderModel implements GLEventListener {
 		animator.add(canvas);
 		animator.start();
 
-		frame.setVisible(true);
+		frame.setVisible(true);*/
 	}
 
 	public RenderModel(int swapInterval) {
@@ -176,7 +185,7 @@ public class RenderModel implements GLEventListener {
 		texture.enable(gl);
 
 		for (ModelObject modelObject : model.objects) {
-			short[] p = modelObject.polygons;
+			int[] p = modelObject.polygons;
 			float[] v = modelObject.vertices;
 			float[] t = modelObject.textureCoordinates;
 

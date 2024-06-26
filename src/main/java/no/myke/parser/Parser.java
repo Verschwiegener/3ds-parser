@@ -6,7 +6,7 @@ import java.io.IOException;
  * This parser understands the layout of the 3ds file and is
  * able to construct a Model from a reader.
  *
- * @author Kjetil Østerås
+ * @author Kjetil ï¿½sterï¿½s
  */
 public class Parser {
 
@@ -106,7 +106,7 @@ public class Parser {
     }
 
     private void parseVerticesList() throws IOException {
-        short numVertices = reader.getShort();
+        int numVertices = reader.getShort() & 0xffff; //Unsigned Short
         float[] vertices = new float[numVertices * 3];
         for (int i=0; i<vertices.length; i++) {
             vertices[i] = reader.getFloat();
@@ -117,12 +117,12 @@ public class Parser {
     }
 
     private void parseFacesDescription() throws IOException {
-        short numFaces = reader.getShort();
-        short[] faces = new short[numFaces * 3];
+        int numFaces = reader.getShort() & 0xffff; //Unsigned Short
+        int[] faces = new int[numFaces * 3];
         for (int i=0; i<numFaces; i++) {
-            faces[i*3] = reader.getShort();
-            faces[i*3 + 1] = reader.getShort();
-            faces[i*3 + 2] = reader.getShort();
+            faces[i*3] = reader.getShort() & 0xffff;
+            faces[i*3 + 1] = reader.getShort() & 0xffff;
+            faces[i*3 + 2] = reader.getShort() & 0xffff;
             reader.getShort(); // Discard face flag
         }
         log("Found %d faces", numFaces);
@@ -141,7 +141,7 @@ public class Parser {
     }
 
     private void parseMappingCoordinates() throws IOException {
-        short numVertices = reader.getShort();
+        int numVertices = reader.getShort() & 0xffff; //Unsigned Short
         float[] uv = new float[numVertices * 2];
         for (int i=0; i<numVertices; i++) {
             uv[i*2] = reader.getFloat();
